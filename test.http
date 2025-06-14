@@ -1,0 +1,20 @@
+
+GET http://localhost:8080/api/student
+
+##
+# POST http://localhost:8080/api/student
+# Content-Type: application/json
+
+# {
+#   "name": "Kamal",
+#   "email": "Kamal@root.com",
+#   "dob": "1967-06-10"
+# }
+
+##
+
+# DELETE  http://localhost:8080/api/student/1
+
+##
+
+PUT http://localhost:8080/api/student/2?name=Maria&email=maria@root.com
