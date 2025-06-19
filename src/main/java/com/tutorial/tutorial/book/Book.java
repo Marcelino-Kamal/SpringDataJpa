@@ -4,7 +4,7 @@ import java.time.ZonedDateTime;
 
 import com.tutorial.tutorial.student.Student;
 
-
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ForeignKey;
@@ -45,7 +45,9 @@ public class Book {
     )
     private ZonedDateTime createdAt;
     
-    @ManyToOne
+    @ManyToOne(
+        cascade = CascadeType.MERGE
+    )
     @JoinColumn(
         name = "student_book_id",
         referencedColumnName = "id", // <----- id in the Student table

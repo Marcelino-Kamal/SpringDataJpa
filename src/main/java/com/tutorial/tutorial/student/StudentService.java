@@ -5,6 +5,7 @@ package com.tutorial.tutorial.student;
 import java.util.List;
 import java.util.Optional;
 
+import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
@@ -27,9 +28,6 @@ public class StudentService {
     public List<Student> getStudents(){
 		return Repo.findAll();
 	}
-
-
-
 
     public void addNewStudent(Student student) {
         Optional<Student> studentOptional= Repo.findByEmail(student.getEmail());
@@ -56,6 +54,27 @@ public class StudentService {
        );
        student.setEmail(email);
        student.setName(name);
+    }
+
+     /*
+     * The Following function is created because of the Lazy,Eager problem
+     * To overcome it with more suitable way than using the annotatin 
+     *              fetch = FETCHTYPE.Eager
+     *  the Hibernate offer a function to load the the books for us before the student 
+     * and then add it with the student output
+     * this is much safer and better way than the Eager
+     */
+    
+
+    @Transactional
+    public Optional<Student> StudentWithBook(Long id){
+        Optional<Student> student = Repo.findById(id);
+        if(student.isEmpty()){
+            return Optional.empty();
+        }
+        Hibernate.initialize(student.get().getBooks());
+        return student;
+        
     }
 
 }

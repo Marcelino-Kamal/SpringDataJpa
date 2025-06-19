@@ -2,7 +2,9 @@ package com.tutorial.tutorial.student;
 
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tutorial.tutorial.book.Book;
@@ -44,16 +46,17 @@ public class Student {
     @JsonFormat(pattern = "yyyy-MM-dd") 
     @Column(name = "dob", nullable = false)
     private LocalDate dob;
-
+    //the One to one is default is EAGER
     @OneToOne(mappedBy = "student",cascade = CascadeType.ALL,orphanRemoval = false)
     private StudentCard studentCard;
-    
+    // THE ONE TO MANY is deafualt LAZY
     @OneToMany(
-        cascade = CascadeType.ALL,
+        cascade = {CascadeType.PERSIST,CascadeType.REMOVE},
         mappedBy = "student",
-        fetch = FetchType.EAGER
+        orphanRemoval = true
+        
     )
-    private List<Book> books;
+    private Set<Book> books = new HashSet<>() ;
 
     @Transient
     private Integer age;
@@ -102,9 +105,24 @@ public class Student {
     public void setStudentCard(StudentCard studentCard) { this.studentCard = studentCard; }
 
 
-    public List<Book> getBooks() { return this.books;  }
+    public Set<Book> getBooks() { return this.books;  }
 
-    public void setBooks(List<Book> books) { this.books = books;}
+    public void setBooks(Set<Book> books) { this.books = books;}
+
+    public void addBook(Book book){
+        if(!books.contains(book)){
+            books.add(book);
+            book.setStudent(this);
+        }
+    }
+    public void removeBook(Book book){
+        if(books.contains(book)){
+            books.remove(book);
+            book.setStudent(null);
+        }else{
+            System.out.println("No Book Found");
+        }
+    }
 
 
     @Override

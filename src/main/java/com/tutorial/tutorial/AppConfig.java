@@ -1,10 +1,11 @@
-package com.tutorial.tutorial.student;
+package com.tutorial.tutorial;
 
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.ZoneId;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
@@ -18,18 +19,66 @@ import com.github.javafaker.Faker;
 import com.tutorial.tutorial.book.Book;
 import com.tutorial.tutorial.card.StudentCard;
 import com.tutorial.tutorial.card.StudentCardRepo;
+import com.tutorial.tutorial.student.Student;
+import com.tutorial.tutorial.student.StudentRepo;
+import com.tutorial.tutorial.student.StudentService;
 
 @Configuration
-public class StudentConfig {
+public class AppConfig {
 
     
+    
     @Bean
-    CommandLineRunner commandLineRunner(StudentRepo Repo,StudentCardRepo CardRepo) {
+    CommandLineRunner commandLineRunner(StudentRepo Repo,StudentCardRepo CardRepo,
+    StudentService Studentservice) {
         return args -> {
-            
+            Student student = new Student("Karo","karo@gmail.com",LocalDate.of(2002, Month.APRIL, 1));
+        Book b = new Book();
+        b.setBookName("Hello world");
+        student.addBook(b);
 
+        Repo.save(student);
+
+        System.out.println(Studentservice.StudentWithBook(1L));
+        
+        student.removeBook(b);
+
+        Repo.save(student);
+
+        System.out.println(Studentservice.StudentWithBook(1L));
+             
         };
 
+    }
+    private void GetBookAndStudentWithOneToManyBidirectional(StudentRepo Repo, StudentService Studentservice) {
+        Student student = new Student("Karo","karo@gmail.com",LocalDate.of(2002, Month.APRIL, 1));
+        Book b = new Book();
+        b.setBookName("Hello world");
+        student.addBook(b);
+
+        Repo.save(student);
+
+        System.out.println(Studentservice.StudentWithBook(1L));
+    }
+    private void getStudentWithBookWithoutEager(StudentRepo Repo, StudentService Studentservice) {
+        Student student= new Student(
+      "Marco", "Marco@gmail.com", LocalDate.of(1999, Month.JULY, 3)); 
+      Book harry = new Book();
+      harry.setBookName("Harry Potter");
+      harry.setStudent(student);
+      Book got = new Book();
+      got.setBookName("Game of Thrones");
+      got.setStudent(student);
+      StudentCard studentCard = new StudentCard();
+      studentCard.setCardNumber("12345");
+      student.setStudentCard(studentCard);
+      studentCard.setStudent(student);
+       
+      student.setBooks(Set.of(harry,got));
+      System.out.println("-------------");
+      Repo.save(student);
+      System.out.println(student);
+      System.out.println(Studentservice.StudentWithBook(1L));
     }
     private void CreateStudentWithCardAndBook(StudentRepo Repo) {
         Student student= new Student(
@@ -45,7 +94,7 @@ public class StudentConfig {
         student.setStudentCard(studentCard);
         studentCard.setStudent(student);
          
-        student.setBooks(List.of(harry,got));
+        student.setBooks(Set.of(harry,got));
         System.out.println("-------------");
         Repo.save(student);
         System.out.println("-------------");
