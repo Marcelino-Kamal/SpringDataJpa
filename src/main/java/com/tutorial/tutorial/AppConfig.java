@@ -19,6 +19,8 @@ import com.github.javafaker.Faker;
 import com.tutorial.tutorial.book.Book;
 import com.tutorial.tutorial.card.StudentCard;
 import com.tutorial.tutorial.card.StudentCardRepo;
+import com.tutorial.tutorial.course.Course;
+import com.tutorial.tutorial.course.CourseRepo;
 import com.tutorial.tutorial.student.Student;
 import com.tutorial.tutorial.student.StudentRepo;
 import com.tutorial.tutorial.student.StudentService;
@@ -30,25 +32,43 @@ public class AppConfig {
     
     @Bean
     CommandLineRunner commandLineRunner(StudentRepo Repo,StudentCardRepo CardRepo,
-    StudentService Studentservice) {
+    StudentService Studentservice,CourseRepo CR) {
         return args -> {
-            Student student = new Student("Karo","karo@gmail.com",LocalDate.of(2002, Month.APRIL, 1));
-        Book b = new Book();
-        b.setBookName("Hello world");
-        student.addBook(b);
-
-        Repo.save(student);
-
-        System.out.println(Studentservice.StudentWithBook(1L));
         
-        student.removeBook(b);
 
-        Repo.save(student);
-
-        System.out.println(Studentservice.StudentWithBook(1L));
-             
         };
 
+    }
+    private void ManyToManyStudentAndCourse(StudentRepo Repo) {
+        Student Karo = new Student("Karo","karo@gmail.com",LocalDate.of(2002, Month.APRIL, 1));    
+              Student Marco= new Student(
+      "Marco", "Marco@gmail.com", LocalDate.of(1999, Month.JULY, 3)); 
+        Course java = new Course("OOP java","CESS");
+        Course mechnics = new Course("Fluid", "Mechatronics");
+        
+        Karo.addCourse(java);
+        Karo.addCourse(mechnics);
+        Marco.addCourse(java);
+
+        Repo.saveAll(List.of(Karo,Marco));
+
+        System.out.println(Repo.findAll());
+    }
+    private void removeBookWhileKeepingStudent(StudentRepo Repo, StudentService Studentservice) {
+        Student student = new Student("Karo","karo@gmail.com",LocalDate.of(2002, Month.APRIL, 1));
+      Book b = new Book();
+      b.setBookName("Hello world");
+      student.addBook(b);
+
+      Repo.save(student);
+
+      System.out.println(Studentservice.StudentWithBook(1L));
+      
+      student.removeBook(b);
+
+      Repo.save(student);
+
+      System.out.println(Studentservice.StudentWithBook(1L));
     }
     private void GetBookAndStudentWithOneToManyBidirectional(StudentRepo Repo, StudentService Studentservice) {
         Student student = new Student("Karo","karo@gmail.com",LocalDate.of(2002, Month.APRIL, 1));

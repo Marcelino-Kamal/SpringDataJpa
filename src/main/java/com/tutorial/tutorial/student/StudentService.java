@@ -74,7 +74,6 @@ public class StudentService {
         }
         Hibernate.initialize(student.get().getBooks());
         return student;
-        
     }
-
+    
 }

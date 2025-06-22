@@ -9,6 +9,7 @@ import java.util.Set;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tutorial.tutorial.book.Book;
 import com.tutorial.tutorial.card.StudentCard;
+import com.tutorial.tutorial.course.Course;
 
 import jakarta.persistence.*;
 
@@ -58,6 +59,26 @@ public class Student {
     )
     private Set<Book> books = new HashSet<>() ;
 
+    @ManyToMany(
+        cascade = {CascadeType.PERSIST}
+    )
+    @JoinTable(
+        name = "course_enrollment", //<---- new Table Name
+        joinColumns = @JoinColumn(
+            name = "student_id",
+            foreignKey = @ForeignKey(
+                name = "enrollment_student_id_FK"
+            )
+        ),
+        inverseJoinColumns = @JoinColumn(
+            name = "course_id",
+            foreignKey = @ForeignKey(
+                name = "enrollment_course_id_FK"
+            )
+        )
+    )
+    private Set<Course> courses = new HashSet<>();
+
     @Transient
     private Integer age;
 
@@ -104,10 +125,14 @@ public class Student {
 
     public void setStudentCard(StudentCard studentCard) { this.studentCard = studentCard; }
 
-
     public Set<Book> getBooks() { return this.books;  }
 
     public void setBooks(Set<Book> books) { this.books = books;}
+    
+    public Set<Course> getCourses() { return courses; }
+
+    public void setCourses(Set<Course> courses) { this.courses = courses; }
+    
 
     public void addBook(Book book){
         if(!books.contains(book)){
@@ -124,6 +149,21 @@ public class Student {
         }
     }
 
+    public void addCourse(Course course){
+        if(!courses.contains(course)){
+            courses.add(course);
+            course.enroll(this);
+            
+        }
+    }
+    
+    public void removeCourse(Course course){
+        if(courses.contains(course)){
+            courses.remove(course);
+            course.dropCourse(null);
+        }
+    }
+
 
     @Override
     public String toString() {
@@ -134,8 +174,10 @@ public class Student {
             ", dob='" + getDob() + "'" +
             ", studentCard='" + getStudentCard() + "'" +
             ", books='" + getBooks() + "'" +
+            ", courses='" + getCourses() + "'" +
             ", age='" + getAge() + "'" +
             "}";
     }
+
     
 }

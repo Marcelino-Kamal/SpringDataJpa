@@ -2,6 +2,7 @@ package com.tutorial.tutorial.student;
 
 import java.util.Optional;
 
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -37,4 +38,8 @@ public interface StudentRepo extends JpaRepository<Student,Long>{
     @Modifying
     @Query("DELETE FROM Student s WHERE s.email = ?1")
     int ddeleteByEmail(String email);
+
+
+    @EntityGraph(attributePaths = {"books", "courses"})
+    List<Student> findAll();
 }
