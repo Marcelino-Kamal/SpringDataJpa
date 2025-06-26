@@ -3,6 +3,7 @@ package com.tutorial.tutorial.course;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.tutorial.tutorial.enrollment.CourseEnrollment;
 import com.tutorial.tutorial.student.Student;
 
 import jakarta.persistence.Column;
@@ -11,6 +12,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 
@@ -45,20 +47,32 @@ public class Course {
     )
     private String department;
 
-    @ManyToMany(
-        mappedBy = "courses"
+    // @ManyToMany(
+    //     mappedBy = "courses"
+    // )
+    // private Set<Student> students = new HashSet<>();
+
+    @OneToMany(
+        mappedBy = "course"
     )
-    private Set<Student> students = new HashSet<>();
+    private Set<CourseEnrollment> courseEnrollments= new HashSet<>();
 
-
-
-    public Set<Student> getStudents() {
-        return this.students;
+    public Set<CourseEnrollment> getCourseEnrollments() {
+        return this.courseEnrollments;
     }
 
-    public void setStudents(Set<Student> students) {
-        this.students = students;
+    public void setCourseEnrollments(Set<CourseEnrollment> courseEnrollments) {
+        this.courseEnrollments = courseEnrollments;
     }
+
+
+    // public Set<Student> getStudents() {
+    //     return this.students;
+    // }
+
+    // public void setStudents(Set<Student> students) {
+    //     this.students = students;
+    // }
 
 
     public Course() {
@@ -102,14 +116,22 @@ public class Course {
         this.department = department;
     }
 
-    public void enroll(Student student){
-        if(!students.contains(student)){
-            students.add(student);
-        }
-    }
+    // public void enroll(Student student){
+    //     if(!students.contains(student)){
+    //         students.add(student);
+    //     }
+    // }
 
-    public void dropCourse(Student student){
-        students.remove(student);
+    // public void dropCourse(Student student){
+    //     students.remove(student);
+    // }
+
+    public void addStudendEnrollment(Student s){
+        courseEnrollments.add(new CourseEnrollment(s,this));
+
+    }
+    public void removeStudentEnrollment(Student s){
+        courseEnrollments.removeIf(en-> en.getStudent().equals(s));
     }
         
 
