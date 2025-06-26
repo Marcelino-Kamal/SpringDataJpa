@@ -1,4 +1,4 @@
-package com.tutorial.tutorial;
+package com.tutorial.tutorial.config;
 
 import java.time.LocalDate;
 import java.time.Month;
@@ -34,9 +34,16 @@ public class AppConfig {
     CommandLineRunner commandLineRunner(StudentRepo Repo, StudentCardRepo CardRepo,
             StudentService Studentservice, CourseRepo CR,CourseEnrollmentRepo CER) {
         return args -> {
-         SoftDelete(Repo);
-            
+            Student Mathew = new Student("Mathew",
+          "Mathew@root.com", LocalDate.of(2001, Month.OCTOBER, 13));
 
+          Mathew = Repo.save(Mathew);
+          System.out.println("Created At: "+ Mathew.getCreatedAt());
+          System.out.println("Created By: "+ Mathew.getCreatedBy());
+            
+          System.out.println("Updated At: "+ Mathew.getModifedAt());
+          System.out.println("Updated By: "+ Mathew.getModifyBy());
+            Repo.delete(Mathew);
         };
 
     }

@@ -1,5 +1,6 @@
 package com.tutorial.tutorial.student;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.ZonedDateTime;
@@ -9,6 +10,11 @@ import java.util.Set;
 
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tutorial.tutorial.book.Book;
@@ -37,6 +43,9 @@ import jakarta.persistence.*;
     // get only values if the following sql :
     "deleted_at IS NULL"
 )
+@EntityListeners({
+    AuditingEntityListener.class
+})
 public class Student {
 
     @Id
@@ -102,7 +111,22 @@ public class Student {
     private Set<CourseEnrollment> courseEnrollments= new HashSet<>();
 
     private ZonedDateTime deletedAt;
+    //so it can be audited
+    @CreatedDate
+    @Column(
+        updatable = false
+    )
+    private Instant createdAt;
 
+    @LastModifiedDate
+    @Column(updatable = false)
+    private Instant modifedAt;
+    
+    @LastModifiedBy
+    private String modifyBy;
+
+    @CreatedBy
+    private String createdBy;
     
     @Transient
     private Integer age;
@@ -209,7 +233,6 @@ public class Student {
             ", dob='" + getDob() + "'" +
             ", studentCard='" + getStudentCard() + "'" +
             ", books='" + getBooks() + "'" +
-        
             ", age='" + getAge() + "'" +
             "}";
     }
@@ -220,6 +243,38 @@ public class Student {
 
     public void setDeletedAt(ZonedDateTime deletedAt) {
         this.deletedAt = deletedAt;
+    }
+
+    public Instant getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Instant createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Instant getModifedAt() {
+        return modifedAt;
+    }
+
+    public void setModifedAt(Instant modifedAt) {
+        this.modifedAt = modifedAt;
+    }
+
+    public String getModifyBy() {
+        return modifyBy;
+    }
+
+    public void setModifyBy(String modifyBy) {
+        this.modifyBy = modifyBy;
+    }
+
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
     }
 
     
