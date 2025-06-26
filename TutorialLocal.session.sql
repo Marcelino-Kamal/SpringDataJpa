@@ -1,5 +1,5 @@
 
-SELECT * FROM course_enrollment;
+
 
 SELECT * FROM students
 JOIN course_enrollment ce ON students.id = ce.student_id
