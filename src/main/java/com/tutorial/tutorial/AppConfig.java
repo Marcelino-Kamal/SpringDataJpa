@@ -34,7 +34,16 @@ public class AppConfig {
     CommandLineRunner commandLineRunner(StudentRepo Repo, StudentCardRepo CardRepo,
             StudentService Studentservice, CourseRepo CR,CourseEnrollmentRepo CER) {
         return args -> {
-                
+         Student Mathew = new Student("Mathew",
+          "Mathew@root.com", LocalDate.of(2001, Month.OCTOBER, 13));
+          Student Marco = new Student(
+        "Marco", "Marco@gmail.com", LocalDate.of(1999, Month.JULY, 3));
+            Repo.saveAll(List.of(Marco,Mathew));
+            System.out.println(Repo.count());
+            Repo.deleteById(1L);
+            System.out.println(Repo.count());
+            
+
         };
 
     }

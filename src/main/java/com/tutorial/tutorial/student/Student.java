@@ -2,9 +2,13 @@ package com.tutorial.tutorial.student;
 
 import java.time.LocalDate;
 import java.time.Period;
+import java.time.ZonedDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tutorial.tutorial.book.Book;
@@ -23,6 +27,15 @@ import jakarta.persistence.*;
             columnNames = "email"
         )
     }
+)
+//Override the repo.delete()
+@SQLDelete(
+    sql = "UPDATE students SET deleted_at= now() WHERE id = ?"
+)
+//Exclude this a deleted record
+@SQLRestriction(
+    // get only values if the following sql :
+    "deleted_at IS NULL"
 )
 public class Student {
 
@@ -88,6 +101,9 @@ public class Student {
     )
     private Set<CourseEnrollment> courseEnrollments= new HashSet<>();
 
+    private ZonedDateTime deletedAt;
+
+    
     @Transient
     private Integer age;
 
@@ -196,6 +212,14 @@ public class Student {
         
             ", age='" + getAge() + "'" +
             "}";
+    }
+
+    public ZonedDateTime getDeletedAt() {
+        return deletedAt;
+    }
+
+    public void setDeletedAt(ZonedDateTime deletedAt) {
+        this.deletedAt = deletedAt;
     }
 
     
