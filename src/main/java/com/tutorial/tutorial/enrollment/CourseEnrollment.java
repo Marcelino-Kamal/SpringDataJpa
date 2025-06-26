@@ -93,6 +93,33 @@ public class CourseEnrollment {
         return createdAt;
     }
 
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((enrollmentId == null) ? 0 : enrollmentId.hashCode());
+        return result;
+    }
+
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        CourseEnrollment other = (CourseEnrollment) obj;
+        if (enrollmentId == null) {
+            if (other.enrollmentId != null)
+                return false;
+        } else if (!enrollmentId.equals(other.enrollmentId))
+            return false;
+        return true;
+    }
+
     
 
 

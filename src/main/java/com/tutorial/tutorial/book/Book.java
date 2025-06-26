@@ -98,16 +98,16 @@ public class Book {
     public void setStudent(Student student) {
         this.student = student;
     }
-    
 
     @Override
     public String toString() {
-        return "{" +
-            " id='" + getId() + "'" +
-            ", BookName='" + getBookName() + "'" +
-            ", createdAt='" + getCreatedAt() + "'" +
-            "}";
+        return "Book [id=" + id + 
+        ", BookName=" + BookName + 
+        ", createdAt=" + createdAt + "]";
     }
+    
+
+    
 
  
     

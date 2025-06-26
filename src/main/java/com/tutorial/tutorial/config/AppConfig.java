@@ -1,5 +1,6 @@
 package com.tutorial.tutorial.config;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.ZoneId;
@@ -16,6 +17,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
 import com.github.javafaker.Faker;
+import com.tutorial.tutorial.account.Account;
+import com.tutorial.tutorial.account.AccountRepo;
+import com.tutorial.tutorial.account.AccountServices;
 import com.tutorial.tutorial.book.Book;
 import com.tutorial.tutorial.book.BookRepo;
 import com.tutorial.tutorial.card.StudentCard;
@@ -33,11 +37,34 @@ public class AppConfig {
 
     @Bean
     CommandLineRunner commandLineRunner(StudentRepo Repo, StudentCardRepo CardRepo,
-            StudentService Studentservice, CourseRepo CR,CourseEnrollmentRepo CER,BookRepo BRepo) {
+            StudentService Studentservice, CourseRepo CR,CourseEnrollmentRepo CER,
+            BookRepo BRepo,AccountServices AS,AccountRepo aRepo) {
         return args -> {
-          
+           Account a = new Account();
+           a.setbalance(new BigDecimal("100"));
+           aRepo.save(a);
+            Account b = new Account();
+           b.setbalance(new BigDecimal("150"));
+           aRepo.save(b);
+           AS.transfer(a,b, BigDecimal.TEN);
+
+           aRepo.findAll().forEach(ax->{
+            System.out.println(ax.getId()+ "  " + ax.getbalance());
+           });
+            
         };
 
+    }
+
+    private void BypassToString(StudentRepo Repo, BookRepo BRepo) {
+        Student Mathew = new Student("Mathew",
+        "Mathew@root.com", LocalDate.of(2001, Month.OCTOBER, 13));
+        Mathew = Repo.save(Mathew);
+        Book b = new Book();
+        b.setBookName("Hello world");
+        b.setStudent(Mathew);
+            BRepo.save(b);
+            Repo.findAll().forEach(System.out::println);
     }
 
     private void DTOProjection(StudentRepo Repo, BookRepo BRepo) {
@@ -48,6 +75,7 @@ public class AppConfig {
         b.setBookName("Hello world");
         b.setStudent(Mathew);
             BRepo.save(b);
+            
             BRepo.getAllBooksDto().forEach(System.out::println);
     }
 

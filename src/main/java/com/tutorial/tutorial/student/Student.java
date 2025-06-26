@@ -23,6 +23,7 @@ import com.tutorial.tutorial.course.Course;
 import com.tutorial.tutorial.enrollment.CourseEnrollment;
 
 import jakarta.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Table(
@@ -222,23 +223,14 @@ public class Student {
     //         course.dropCourse(null);
     //     }
     // }
-
-
-    @Override
-    public String toString() {
-        return "{" +
-            " id='" + getId() + "'" +
-            ", name='" + getName() + "'" +
-            ", email='" + getEmail() + "'" +
-            ", dob='" + getDob() + "'" +
-            ", studentCard='" + getStudentCard() + "'" +
-            ", books='" + getBooks() + "'" +
-            ", age='" + getAge() + "'" +
-            "}";
-    }
-
     public ZonedDateTime getDeletedAt() {
         return deletedAt;
+    }
+    @Override
+    public String toString() {
+        return "Student [id=" + id + ", name=" + name + ", email=" + email + ", dob=" + dob + ", studentCard="
+                + studentCard + ", deletedAt=" + deletedAt + ", createdAt=" + createdAt + ", modifedAt=" + modifedAt
+                + ", modifyBy=" + modifyBy + ", createdBy=" + createdBy + ", age=" + getAge() + "]";
     }
 
     public void setDeletedAt(ZonedDateTime deletedAt) {
@@ -277,7 +269,32 @@ public class Student {
         this.createdBy = createdBy;
     }
 
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((id == null) ? 0 : id.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Student other = (Student) obj;
+        if (id == null) {
+            if (other.id != null)
+                return false;
+        } else if (!id.equals(other.id))
+            return false;
+        return true;
+    }
     
+
 
     
 }
