@@ -34,7 +34,15 @@ public class AppConfig {
     CommandLineRunner commandLineRunner(StudentRepo Repo, StudentCardRepo CardRepo,
             StudentService Studentservice, CourseRepo CR,CourseEnrollmentRepo CER) {
         return args -> {
-         Student Mathew = new Student("Mathew",
+         SoftDelete(Repo);
+            
+
+        };
+
+    }
+
+    private void SoftDelete(StudentRepo Repo) {
+        Student Mathew = new Student("Mathew",
           "Mathew@root.com", LocalDate.of(2001, Month.OCTOBER, 13));
           Student Marco = new Student(
         "Marco", "Marco@gmail.com", LocalDate.of(1999, Month.JULY, 3));
@@ -42,10 +50,6 @@ public class AppConfig {
             System.out.println(Repo.count());
             Repo.deleteById(1L);
             System.out.println(Repo.count());
-            
-
-        };
-
     }
 
     private void ManyToManyAddingStudentWithCoursesWithBiDriectiona(StudentRepo Repo, CourseEnrollmentRepo CER) {
