@@ -3,6 +3,8 @@ package com.tutorial.tutorial.student;
 import java.util.List;
 import org.springframework.web.bind.annotation.*;
 
+import com.tutorial.tutorial.DTO.StudentDto;
+
 @RestController
 @RequestMapping(path = "api/student")
 public class StudentController {
@@ -14,7 +16,7 @@ public class StudentController {
     }
 
     @GetMapping
-    public List<Student> getStudents() {
+    public List<StudentDto> getStudents() {
         return service.getStudents();
     }
 

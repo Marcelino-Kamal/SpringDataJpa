@@ -17,6 +17,7 @@ import org.springframework.data.domain.Sort;
 
 import com.github.javafaker.Faker;
 import com.tutorial.tutorial.book.Book;
+import com.tutorial.tutorial.book.BookRepo;
 import com.tutorial.tutorial.card.StudentCard;
 import com.tutorial.tutorial.card.StudentCardRepo;
 import com.tutorial.tutorial.course.Course;
@@ -32,20 +33,35 @@ public class AppConfig {
 
     @Bean
     CommandLineRunner commandLineRunner(StudentRepo Repo, StudentCardRepo CardRepo,
-            StudentService Studentservice, CourseRepo CR,CourseEnrollmentRepo CER) {
+            StudentService Studentservice, CourseRepo CR,CourseEnrollmentRepo CER,BookRepo BRepo) {
         return args -> {
-            Student Mathew = new Student("Mathew",
-          "Mathew@root.com", LocalDate.of(2001, Month.OCTOBER, 13));
-
-          Mathew = Repo.save(Mathew);
-          System.out.println("Created At: "+ Mathew.getCreatedAt());
-          System.out.println("Created By: "+ Mathew.getCreatedBy());
-            
-          System.out.println("Updated At: "+ Mathew.getModifedAt());
-          System.out.println("Updated By: "+ Mathew.getModifyBy());
-            Repo.delete(Mathew);
+          
         };
 
+    }
+
+    private void DTOProjection(StudentRepo Repo, BookRepo BRepo) {
+        Student Mathew = new Student("Mathew",
+        "Mathew@root.com", LocalDate.of(2001, Month.OCTOBER, 13));
+        Mathew = Repo.save(Mathew);
+        Book b = new Book();
+        b.setBookName("Hello world");
+        b.setStudent(Mathew);
+            BRepo.save(b);
+            BRepo.getAllBooksDto().forEach(System.out::println);
+    }
+
+    private void AuditingMethod(StudentRepo Repo) {
+        Student Mathew = new Student("Mathew",
+        "Mathew@root.com", LocalDate.of(2001, Month.OCTOBER, 13));
+
+        Mathew = Repo.save(Mathew);
+        System.out.println("Created At: "+ Mathew.getCreatedAt());
+        System.out.println("Created By: "+ Mathew.getCreatedBy());
+        
+        System.out.println("Updated At: "+ Mathew.getModifedAt());
+        System.out.println("Updated By: "+ Mathew.getModifyBy());
+        Repo.delete(Mathew);
     }
 
     private void SoftDelete(StudentRepo Repo) {

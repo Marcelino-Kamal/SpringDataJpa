@@ -8,6 +8,8 @@ import java.util.Optional;
 import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
 
+import com.tutorial.tutorial.DTO.StudentDto;
+
 import jakarta.transaction.Transactional;
 
 @Service
@@ -25,8 +27,15 @@ public class StudentService {
     
 
 
-    public List<Student> getStudents(){
-		return Repo.findAll();
+    public List<StudentDto> getStudents(){
+		return Repo.findAll().stream().
+        map(s-> 
+        new StudentDto(s.getId(),
+        s.getName(),
+        s.getEmail(),
+        s.getBooks(),
+        s.getCourseEnrollments(),
+        s.getCreatedAt())).toList();
 	}
 
     public void addNewStudent(Student student) {

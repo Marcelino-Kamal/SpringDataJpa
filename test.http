@@ -17,4 +17,4 @@ GET http://localhost:8080/api/student
 
 ##
 
-PUT http://localhost:8080/api/student/2?name=Maria&email=maria@root.com
+#PUT http://localhost:8080/api/student/2?name=Maria&email=maria@root.com

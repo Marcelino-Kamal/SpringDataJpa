@@ -40,6 +40,6 @@ public interface StudentRepo extends JpaRepository<Student,Long>{
     int ddeleteByEmail(String email);
 
 
-    @EntityGraph(attributePaths = {"books", "courses"})
+    @EntityGraph(attributePaths = {"books"})
     List<Student> findAll();
 }
